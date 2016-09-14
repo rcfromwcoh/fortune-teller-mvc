@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FortuneTellerMVCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Age" Type="Int32" />
+    <Property Name="BirthMonthID" Type="Int32" />
+    <Property Name="ColorID" Type="Int32" />
+    <Property Name="NumberOfSiblings" Type="Int32" />
+    <NavigationProperty Name="BirthMonth" Relationship="FortuneTellerMVCModel.FK_Customers_BirthMonths" FromRole="Customer" ToRole="BirthMonth" />
+    <NavigationProperty Name="Color" Relationship="FortuneTellerMVCModel.FK_Customers_Colors" FromRole="Customer" ToRole="Color" />
+  </EntityType>
+  <EntityType Name="BirthMonth">
+    <Key>
+      <PropertyRef Name="BirthMonthID" />
+    </Key>
+    <Property Name="BirthMonthID" Type="Int32" Nullable="false" />
+    <Property Name="BirthMonthName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Customers" Relationship="FortuneTellerMVCModel.FK_Customers_BirthMonths" FromRole="BirthMonth" ToRole="Customer" />
+  </EntityType>
+  <EntityType Name="Color">
+    <Key>
+      <PropertyRef Name="ColorID" />
+    </Key>
+    <Property Name="ColorID" Type="Int32" Nullable="false" />
+    <Property Name="ColorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Customers" Relationship="FortuneTellerMVCModel.FK_Customers_Colors" FromRole="Color" ToRole="Customer" />
+  </EntityType>
+  <EntityContainer Name="FortuneTellerMVCEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="BirthMonths" EntityType="Self.BirthMonth" />
+    <EntitySet Name="Colors" EntityType="Self.Color" />
+    <AssociationSet Name="FK_Customers_BirthMonths" Association="FortuneTellerMVCModel.FK_Customers_BirthMonths">
+      <End Role="BirthMonth" EntitySet="BirthMonths" />
+      <End Role="Customer" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Customers_Colors" Association="FortuneTellerMVCModel.FK_Customers_Colors">
+      <End Role="Color" EntitySet="Colors" />
+      <End Role="Customer" EntitySet="Customers" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_Customers_BirthMonths">
+    <End Type="FortuneTellerMVCModel.BirthMonth" Role="BirthMonth" Multiplicity="0..1" />
+    <End Type="FortuneTellerMVCModel.Customer" Role="Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BirthMonth">
+        <PropertyRef Name="BirthMonthID" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="BirthMonthID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Customers_Colors">
+    <End Type="FortuneTellerMVCModel.Color" Role="Color" Multiplicity="0..1" />
+    <End Type="FortuneTellerMVCModel.Customer" Role="Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Color">
+        <PropertyRef Name="ColorID" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="ColorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
