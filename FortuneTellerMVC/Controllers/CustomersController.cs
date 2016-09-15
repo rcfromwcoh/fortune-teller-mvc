@@ -156,7 +156,8 @@ namespace FortuneTellerMVC.Controllers
             {
                 db.Customers.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                //creating an anonymous type
+                return RedirectToAction("Details", new { id = customer.CustomerID });
             }
 
             ViewBag.BirthMonthID = new SelectList(db.BirthMonths, "BirthMonthID", "BirthMonthName", customer.BirthMonthID);
